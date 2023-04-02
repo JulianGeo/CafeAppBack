@@ -1,0 +1,58 @@
+package com.cafeapp.mongo;
+
+import com.cafeapp.model.item.Item;
+import com.cafeapp.model.item.gateways.ItemRepositoryGateway;
+import com.cafeapp.model.user.User;
+import com.cafeapp.mongo.data.ItemData;
+import com.cafeapp.mongo.data.UserData;
+import lombok.RequiredArgsConstructor;
+import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@Repository
+@RequiredArgsConstructor
+public class MongoRepositoryAdapterItem implements ItemRepositoryGateway {
+
+    private final MongoDBRepositoryItem itemRepository;
+    private final ObjectMapper mapper;
+
+
+    @Override
+    public Flux<Item> getAllItems() {
+        return this.itemRepository
+                .findAll()
+                .switchIfEmpty(Mono.error(new Throwable("No items available")))
+                .map(item -> mapper.map(item, Item.class))
+                .onErrorResume(Mono::error);
+    }
+
+    @Override
+    public Mono<Item> getItemById(String id) {
+        return null;
+    }
+
+    @Override
+    public Mono<Item> getItemByName(String id) {
+        return null;
+    }
+
+    @Override
+    public Mono<Item> registerItem(Item item) {
+        return this.itemRepository
+                .save(mapper.map(item, ItemData.class))
+                .map(item1 -> mapper.map(item1, Item.class))
+                .onErrorResume(Mono::error);
+    }
+
+    @Override
+    public Mono<Item> updateItem(Item item) {
+        return null;
+    }
+
+    @Override
+    public Mono<String> unregisterItem(String id) {
+        return null;
+    }
+}
