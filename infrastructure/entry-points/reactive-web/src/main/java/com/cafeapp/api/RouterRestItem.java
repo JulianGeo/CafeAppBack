@@ -1,11 +1,8 @@
 package com.cafeapp.api;
 
 import com.cafeapp.model.item.Item;
-import com.cafeapp.model.user.User;
-import com.cafeapp.usecase.getallitems.GetAllItemsUseCase;
-import com.cafeapp.usecase.getallusers.GetAllUsersUseCase;
-import com.cafeapp.usecase.registeritem.RegisterItemUseCase;
-import com.cafeapp.usecase.registeruser.RegisterUserUseCase;
+import com.cafeapp.usecase.items.getallitems.GetAllItemsUseCase;
+import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;

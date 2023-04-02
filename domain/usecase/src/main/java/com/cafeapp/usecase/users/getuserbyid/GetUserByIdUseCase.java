@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.getuserbyid;
+package com.cafeapp.usecase.users.getuserbyid;
 
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor

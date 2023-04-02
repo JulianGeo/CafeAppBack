@@ -2,14 +2,13 @@ package com.cafeapp.config;
 
 import com.cafeapp.model.item.gateways.ItemRepositoryGateway;
 import com.cafeapp.model.user.gateways.UserRepositoryGateway;
-import com.cafeapp.usecase.getallitems.GetAllItemsUseCase;
-import com.cafeapp.usecase.getallusers.GetAllUsersUseCase;
-import com.cafeapp.usecase.registeritem.RegisterItemUseCase;
-import com.cafeapp.usecase.registeruser.RegisterUserUseCase;
+import com.cafeapp.usecase.items.getallitems.GetAllItemsUseCase;
+import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
+import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
+import com.cafeapp.usecase.users.register.RegisterUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 
 @Configuration
 @ComponentScan(basePackages = "com.cafeapp.usecase")/*,

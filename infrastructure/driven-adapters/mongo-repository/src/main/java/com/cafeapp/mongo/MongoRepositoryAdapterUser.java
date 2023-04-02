@@ -3,7 +3,6 @@ package com.cafeapp.mongo;
 import com.cafeapp.model.user.User;
 import com.cafeapp.model.user.gateways.UserRepositoryGateway;
 import com.cafeapp.mongo.data.UserData;
-import com.cafeapp.mongo.helper.AdapterOperations;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -12,16 +11,16 @@ import reactor.core.publisher.Mono;
 
 @Repository
 @RequiredArgsConstructor
-//public class MongoRepositoryAdapter extends AdapterOperations<Object/* change for domain model */, Object/* change for adapter model */, String, MongoDBRepository>
-public class MongoRepositoryAdapter implements UserRepositoryGateway
+//public class MongoRepositoryAdapterUser extends AdapterOperations<Object/* change for domain model */, Object/* change for adapter model */, String, MongoDBRepositoryUser>
+public class MongoRepositoryAdapterUser implements UserRepositoryGateway
 // implements ModelRepository from domain
 {
 
-    private final MongoDBRepository userRepository;
+    private final MongoDBRepositoryUser userRepository;
     private final ObjectMapper mapper;
 
 
-/*    public MongoRepositoryAdapter(MongoDBRepository repository, ObjectMapper mapper) {
+/*    public MongoRepositoryAdapterUser(MongoDBRepositoryUser repository, ObjectMapper mapper) {
         *//**
          *  Could be use mapper.mapBuilder if your domain model implement builder pattern
          *  super(repository, mapper, d -> mapper.mapBuilder(d,ObjectModel.ObjectModelBuilder.class).build());

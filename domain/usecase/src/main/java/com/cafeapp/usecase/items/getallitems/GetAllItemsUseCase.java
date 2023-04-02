@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.getallitems;
+package com.cafeapp.usecase.items.getallitems;
 
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.item.gateways.ItemRepositoryGateway;

@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.registeruser;
+package com.cafeapp.usecase.users.register;
 
 import com.cafeapp.model.user.User;
 import com.cafeapp.model.user.gateways.UserRepositoryGateway;

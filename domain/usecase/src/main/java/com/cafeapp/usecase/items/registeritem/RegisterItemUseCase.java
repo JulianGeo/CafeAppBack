@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.registeritem;
+package com.cafeapp.usecase.items.registeritem;
 
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.item.gateways.ItemRepositoryGateway;

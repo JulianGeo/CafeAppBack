@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.unregisteruser;
+package com.cafeapp.usecase.users.unregisteruser;
 
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor

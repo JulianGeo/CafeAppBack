@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.getallusers;
+package com.cafeapp.usecase.users.getall;
 
 import com.cafeapp.model.user.User;
 import com.cafeapp.model.user.gateways.UserRepositoryGateway;

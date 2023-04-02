@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.updateuser;
+package com.cafeapp.usecase.users.updateuser;
 
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
