@@ -5,12 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/*
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Item {
+
+    private String id;
+    private String name;
+    private String description;
+    private String imageUrl;
+    private Double price;
+    private Integer stock;
+
 }
-*/
+
