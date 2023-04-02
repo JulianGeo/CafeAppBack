@@ -19,7 +19,6 @@ public class Order {
     private Set items;
     private String status;
     private double subtotal;
-    private double tax;
     private double shipping;
     private double total;
     private String createdAt;
