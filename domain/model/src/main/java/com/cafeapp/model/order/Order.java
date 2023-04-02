@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/*
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,3 +13,4 @@ import lombok.Setter;
 @Builder(toBuilder = true)
 public class Order {
 }
+*/
