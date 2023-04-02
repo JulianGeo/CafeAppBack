@@ -23,10 +23,8 @@ public class ItemData {
     @NotNull(message ="description is required")
     private String description;
     private String imageUrl;
-    @NotBlank(message="Empty field error")
     @NotNull(message ="price is required")
     private Double price;
-    @NotBlank(message="Empty field error")
     @NotNull(message ="stock is required")
     private Integer stock;
 }

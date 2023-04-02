@@ -34,8 +34,6 @@ public class RouterRest {
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }
 
-
-
     @Bean
     public RouterFunction<ServerResponse> registerUser(RegisterUserUseCase registerUserUseCase) {
         return route(POST("/api/users").and(accept(MediaType.APPLICATION_JSON)),
