@@ -1,5 +1,7 @@
 package com.cafeapp.mongo.data;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +16,17 @@ public class ItemData {
 
     @Id
     private String id;
+    @NotBlank(message="Empty field error")
+    @NotNull(message ="name is required")
     private String name;
+    @NotBlank(message="Empty field error")
+    @NotNull(message ="description is required")
     private String description;
     private String imageUrl;
+    @NotBlank(message="Empty field error")
+    @NotNull(message ="price is required")
     private Double price;
+    @NotBlank(message="Empty field error")
+    @NotNull(message ="stock is required")
     private Integer stock;
 }
