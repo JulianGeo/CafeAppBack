@@ -56,7 +56,7 @@ public class RouterRestItem {
     public RouterFunction<ServerResponse> updateItem(UpdateItemUseCase updateItemUseCase) {
         return route(PUT("/api/items/{id}").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(Item.class)
-                        .flatMap(courseDTO -> updateItemUseCase.apply(request.pathVariable("id"), courseDTO)
+                        .flatMap(item -> updateItemUseCase.apply(request.pathVariable("id"), item)
                                 .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
                                 .flatMap(result -> ServerResponse.status(201)
                                         .contentType(MediaType.APPLICATION_JSON)
