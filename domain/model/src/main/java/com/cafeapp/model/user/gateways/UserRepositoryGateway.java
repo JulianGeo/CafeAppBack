@@ -9,6 +9,6 @@ public interface UserRepositoryGateway {
     Mono<User> getUserById(String id);
     Mono<User> getUserByEmail(String id);
     Mono<User> registerUser(User user);
-    Mono<User> updateUser(User user);
-    Mono<String> unregisterUser(String id);
+    Mono<User> updateUser(String id, User user);
+    Mono<Void> unregisterUser(String id);
 }

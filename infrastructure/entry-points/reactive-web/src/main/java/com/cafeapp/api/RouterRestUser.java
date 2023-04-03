@@ -1,7 +1,9 @@
 package com.cafeapp.api;
 
 import com.cafeapp.model.user.User;
+import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
+import com.cafeapp.usecase.users.getuserbyid.GetUserByIdUseCase;
 import com.cafeapp.usecase.users.register.RegisterUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -26,13 +29,25 @@ public class RouterRestUser {
     // TODO: here we deal with user or userData?
 
     @Bean
-    public RouterFunction<ServerResponse> getAllStudents(GetAllUsersUseCase getAllUsersUseCasel){
+    public RouterFunction<ServerResponse> getAllUsers(GetAllUsersUseCase getAllUsersUseCasel){
         return route(GET("/api/users"),
                 request -> ServerResponse.status(201)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(getAllUsersUseCasel.get(), User.class))
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }
+
+    @Bean
+    public RouterFunction<ServerResponse> getUserById(GetUserByIdUseCase getUserByIdUseCase){
+        return route(GET("/api/users/{id}"),
+                request -> getUserByIdUseCase.apply(request.pathVariable("id"))
+                        .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
+                        .flatMap(user -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(user))
+                        .onErrorResume(throwable -> ServerResponse.notFound().build()));
+    }
+
 
     @Bean
     public RouterFunction<ServerResponse> registerUser(RegisterUserUseCase registerUserUseCase) {

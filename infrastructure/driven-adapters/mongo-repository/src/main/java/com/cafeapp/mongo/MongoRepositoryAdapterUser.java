@@ -1,5 +1,6 @@
 package com.cafeapp.mongo;
 
+import com.cafeapp.model.item.Item;
 import com.cafeapp.model.user.User;
 import com.cafeapp.model.user.gateways.UserRepositoryGateway;
 import com.cafeapp.mongo.data.UserData;
@@ -40,7 +41,10 @@ public class MongoRepositoryAdapterUser implements UserRepositoryGateway
 
     @Override
     public Mono<User> getUserById(String id) {
-        return null;
+        return this.userRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("User not found")))
+                .map(user -> mapper.map(user, User.class));
     }
 
     @Override
@@ -57,12 +61,12 @@ public class MongoRepositoryAdapterUser implements UserRepositoryGateway
     }
 
     @Override
-    public Mono<User> updateUser(User user) {
+    public Mono<User> updateUser(String id, User user) {
         return null;
     }
 
     @Override
-    public Mono<String> unregisterUser(String id) {
+    public Mono<Void> unregisterUser(String id) {
         return null;
     }
 }
