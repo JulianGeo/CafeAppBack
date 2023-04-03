@@ -78,4 +78,10 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
                 //TODO: fix it to catch the error
                 .onErrorResume(Mono::error);
     }
+
+    @Override
+    public Mono<Void> deleteAll() {
+        return this.orderRepository.deleteAll()
+                .onErrorResume(Mono::error);
+    }
 }

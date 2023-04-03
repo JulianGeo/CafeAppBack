@@ -49,17 +49,46 @@ public class MongoRepositoryAdapterUser implements UserRepositoryGateway
     }
 
     @Override
-    public Mono<User> getUserByEmail(String id) {
-        return null;
+    public Mono<User> getUserByEmail(String email) {
+        return this.userRepository
+                .findByEmail(email)
+                .switchIfEmpty(Mono.error(new Throwable("User not found")))
+                .map(user -> mapper.map(user, User.class));
     }
 
+
+    //TODO fix this method to only accept unique emails
     @Override
     public Mono<User> registerUser(User user) {
         return this.userRepository
-                .save(mapper.map(user, UserData.class))
-                .map(user1 -> mapper.map(user1, User.class))
+                .findByEmail(user.getEmail())
+                .switchIfEmpty(
+                        this.userRepository.save(mapper.map(user, UserData.class))
+                               //.flatMap(user1 -> Mono.just(mapper.map(user1, User.class))))
+                                //.flatMap(user1 -> mapper.map(user1, User.class)))
+                )
+                .map(user1 -> {
+                    return mapper.map(user1, User.class);
+/*                    if (user1!= null) {
+                        return Mono.error(new Throwable("Email already exists"));
+                    }*/
+
+                })
+                //.flatMap(user1 -> Mono.error(new Throwable("This id already exists")))
                 .onErrorResume(Mono::error);
     }
+
+
+                /*.switchIfEmpty(
+                        this.userRepository.save(mapper.map(user, UserData.class))
+                                .flatMap(user1 -> Mono.just(mapper.map(user1, User.class))))
+                                //.flatMap(user1 -> mapper.map(user1, User.class)))
+                //.flatMap(user -> mapper.map())
+                .thenReturn(Mono.error(new Throwable("Email already exists")))
+                //.save(mapper.map(user, UserData.class))
+                //.map(user1 -> mapper.map(user1, User.class))
+                .onErrorResume(Mono::error);
+    }*/
 
     @Override
     public Mono<User> updateUser(String id, User newUser) {
@@ -80,6 +109,12 @@ public class MongoRepositoryAdapterUser implements UserRepositoryGateway
                 .switchIfEmpty(Mono.error(new Throwable("User not found")))
                 .flatMap(user -> this.userRepository.deleteById(id))
                 //TODO: fix it to catch the error
+                .onErrorResume(Mono::error);
+    }
+
+    @Override
+    public Mono<Void> deleteAll() {
+        return this.userRepository.deleteAll()
                 .onErrorResume(Mono::error);
     }
 }

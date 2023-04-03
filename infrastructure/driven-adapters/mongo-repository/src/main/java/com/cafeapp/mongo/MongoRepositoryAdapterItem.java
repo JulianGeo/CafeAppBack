@@ -72,4 +72,10 @@ public class MongoRepositoryAdapterItem implements ItemRepositoryGateway {
                 //TODO: fix it to catch the error
                 .onErrorResume(Mono::error);
     }
+
+    @Override
+    public Mono<Void> deleteAll() {
+        return this.itemRepository.deleteAll()
+                .onErrorResume(Mono::error);
+    }
 }

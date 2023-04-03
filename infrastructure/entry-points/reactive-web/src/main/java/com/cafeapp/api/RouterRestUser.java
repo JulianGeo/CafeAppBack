@@ -2,10 +2,14 @@ package com.cafeapp.api;
 
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.user.User;
+import com.cafeapp.usecase.items.deleteall.DeleteAllItemsUseCase;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
+import com.cafeapp.usecase.orders.deleteall.DeleteAllOrdersUseCase;
+import com.cafeapp.usecase.users.deleteall.DeleteAllUsersUseCase;
 import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
+import com.cafeapp.usecase.users.getuserbyemail.GetUserByEmailUseCase;
 import com.cafeapp.usecase.users.getuserbyid.GetUserByIdUseCase;
 import com.cafeapp.usecase.users.register.RegisterUserUseCase;
 import com.cafeapp.usecase.users.unregisteruser.UnregisterUserUseCase;
@@ -53,6 +57,18 @@ public class RouterRestUser {
                         .onErrorResume(throwable -> ServerResponse.notFound().build()));
     }
 
+    //If there is more than a user with given email it will return 404 not found
+    @Bean
+    public RouterFunction<ServerResponse> getUserByEmail(GetUserByEmailUseCase getUserByEmailUseCase){
+        return route(GET("/api/users/email/{email}"),
+                request -> getUserByEmailUseCase.apply(request.pathVariable("email"))
+                        .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
+                        .flatMap(user -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(user))
+                        .onErrorResume(throwable -> ServerResponse.notFound().build()));
+    }
+
 
     @Bean
     public RouterFunction<ServerResponse> registerUser(RegisterUserUseCase registerUserUseCase) {
@@ -84,6 +100,18 @@ public class RouterRestUser {
                         .thenReturn(ServerResponse.ok()
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .bodyValue("User with ID: "+request.pathVariable("id") +", was unregistered"))
+                        .flatMap(serverResponseMono -> serverResponseMono)
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> deleteAllUsers(DeleteAllUsersUseCase deleteAllUsersUseCase){
+        return route(DELETE("api/users"),
+                request -> deleteAllUsersUseCase.get()
+                        .thenReturn(
+                                ServerResponse.status(201)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue("All users have been deleted"))
                         .flatMap(serverResponseMono -> serverResponseMono)
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }

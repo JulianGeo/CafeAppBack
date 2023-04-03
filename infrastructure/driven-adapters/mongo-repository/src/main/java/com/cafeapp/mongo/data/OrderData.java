@@ -1,6 +1,7 @@
 package com.cafeapp.mongo.data;
 
 import com.cafeapp.model.item.Item;
+import com.cafeapp.model.user.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -23,9 +24,8 @@ public class OrderData {
 
     @Id
     private String id  =UUID.randomUUID().toString().substring(0,10);
-    @NotBlank(message="Empty field error")
-    @NotNull(message ="userId is required")
-    private String userId;
+    @NotNull(message ="user is required")
+    private User user;
     @NotNull(message ="items are required")
     @NotEmpty(message ="items are required")
     private Set<Item> items = new HashSet();;
@@ -38,10 +38,5 @@ public class OrderData {
     private Double total;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public void calculateTotal(){
-        subtotal = items.stream().map(Item::getPrice).mapToDouble(Double::doubleValue).sum();
-        total = subtotal + shipping;
-    }
 
 }

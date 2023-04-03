@@ -2,9 +2,11 @@ package com.cafeapp.api;
 
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.order.Order;
+import com.cafeapp.usecase.items.deleteall.DeleteAllItemsUseCase;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
+import com.cafeapp.usecase.orders.deleteall.DeleteAllOrdersUseCase;
 import com.cafeapp.usecase.orders.getallorders.GetAllOrdersUseCase;
 import com.cafeapp.usecase.orders.getorderbyid.GetOrderByIdUseCase;
 import com.cafeapp.usecase.orders.registerorder.RegisterOrderUseCase;
@@ -75,6 +77,18 @@ public class RouterRestOrder {
                         .thenReturn(ServerResponse.ok()
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .bodyValue("Order with ID: "+request.pathVariable("id") +", was unregistered"))
+                        .flatMap(serverResponseMono -> serverResponseMono)
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> deleteAllOrders(DeleteAllOrdersUseCase deleteAllOrdersUseCase){
+        return route(DELETE("api/orders"),
+                request -> deleteAllOrdersUseCase.get()
+                        .thenReturn(
+                        ServerResponse.status(201)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue("All orders have been deleted"))
                         .flatMap(serverResponseMono -> serverResponseMono)
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class UserData {
 
     @Id
-    private String id =UUID.randomUUID().toString().substring(0,10);;
+    private String id =UUID.randomUUID().toString().substring(0,10);
     private String idNum;
     @NotBlank(message="Empty field error")
     @NotNull(message ="name is required")

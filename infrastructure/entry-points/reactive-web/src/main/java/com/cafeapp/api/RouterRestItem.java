@@ -1,11 +1,13 @@
 package com.cafeapp.api;
 
 import com.cafeapp.model.item.Item;
+import com.cafeapp.usecase.items.deleteall.DeleteAllItemsUseCase;
 import com.cafeapp.usecase.items.getallitems.GetAllItemsUseCase;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
 import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
+import com.cafeapp.usecase.users.deleteall.DeleteAllUsersUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -71,6 +73,18 @@ public class RouterRestItem {
                         .thenReturn(ServerResponse.ok()
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .bodyValue("Item with ID: "+request.pathVariable("id") +", was unregistered"))
+                        .flatMap(serverResponseMono -> serverResponseMono)
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> deleteAllItems(DeleteAllItemsUseCase deleteAllItemsUseCase){
+        return route(DELETE("api/items"),
+                request -> deleteAllItemsUseCase.get()
+                        .thenReturn(
+                                ServerResponse.status(201)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue("All items have been deleted"))
                         .flatMap(serverResponseMono -> serverResponseMono)
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }

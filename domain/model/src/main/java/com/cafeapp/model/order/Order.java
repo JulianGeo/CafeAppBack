@@ -1,5 +1,6 @@
 package com.cafeapp.model.order;
 import com.cafeapp.model.item.Item;
+import com.cafeapp.model.user.User;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class Order {
 
     private String id;
-    private String userId;
+    private User user;
     private Set<Item>items = new HashSet();
     private String status;
     private Double subtotal;

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.UUID;
+
 @Data
 @Document(collection = "items")
 @NoArgsConstructor
@@ -15,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ItemData {
 
     @Id
-    private String id;
+    private String id  =UUID.randomUUID().toString().substring(0,10);
     @NotBlank(message="Empty field error")
     @NotNull(message ="name is required")
     private String name;
