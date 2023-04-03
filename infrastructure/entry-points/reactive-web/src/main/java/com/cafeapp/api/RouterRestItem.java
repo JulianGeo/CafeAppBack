@@ -4,6 +4,7 @@ import com.cafeapp.model.item.Item;
 import com.cafeapp.usecase.items.getallitems.GetAllItemsUseCase;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
+import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,18 @@ public class RouterRestItem {
         return route(POST("/api/items").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(Item.class)
                         .flatMap(item -> registerItemUseCase.apply(item)
+                                .flatMap(result -> ServerResponse.status(201)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue(result))
+                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_ACCEPTABLE).bodyValue(throwable.getMessage()))));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> updateItem(UpdateItemUseCase updateItemUseCase) {
+        return route(PUT("/api/items/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(Item.class)
+                        .flatMap(courseDTO -> updateItemUseCase.apply(request.pathVariable("id"), courseDTO)
+                                .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
                                 .flatMap(result -> ServerResponse.status(201)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .bodyValue(result))

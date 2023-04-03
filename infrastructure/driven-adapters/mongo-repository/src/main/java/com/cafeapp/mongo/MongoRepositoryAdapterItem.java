@@ -51,8 +51,15 @@ public class MongoRepositoryAdapterItem implements ItemRepositoryGateway {
     }
 
     @Override
-    public Mono<Item> updateItem(String id, Item item) {
-        return null;
+    public Mono<Item> updateItem(String id, Item newItem) {
+        return this.itemRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("No item matches the provided ID")))
+                .flatMap(oldItem ->{
+                    newItem.setId(oldItem.getId());
+                    return itemRepository.save(mapper.map(newItem, ItemData.class));
+                }).map(newItem1 -> mapper.map(newItem1, Item.class))
+                .onErrorResume(Mono::error);
     }
 
     @Override
