@@ -30,7 +30,11 @@ public class MongoRepositoryAdapterItem implements ItemRepositoryGateway {
 
     @Override
     public Mono<Item> getItemById(String id) {
-        return null;
+
+        return this.itemRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("Item not found")))
+                .map(item -> mapper.map(item, Item.class));
     }
 
     @Override
@@ -47,12 +51,12 @@ public class MongoRepositoryAdapterItem implements ItemRepositoryGateway {
     }
 
     @Override
-    public Mono<Item> updateItem(Item item) {
+    public Mono<Item> updateItem(String id, Item item) {
         return null;
     }
 
     @Override
-    public Mono<String> unregisterItem(String id) {
+    public Mono<Void> unregisterItem(String id) {
         return null;
     }
 }

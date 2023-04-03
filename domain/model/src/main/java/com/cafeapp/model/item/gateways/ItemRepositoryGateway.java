@@ -11,7 +11,7 @@ public interface ItemRepositoryGateway {
     Mono<Item> getItemById(String id);
     Mono<Item> getItemByName(String id);
     Mono<Item> registerItem(Item item);
-    Mono<Item> updateItem(Item item);
-    Mono<String> unregisterItem(String id);
+    Mono<Item> updateItem(String id, Item item);
+    Mono<Void> unregisterItem(String id);
 }
 

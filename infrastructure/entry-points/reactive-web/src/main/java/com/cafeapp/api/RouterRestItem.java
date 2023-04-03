@@ -2,6 +2,7 @@ package com.cafeapp.api;
 
 import com.cafeapp.model.item.Item;
 import com.cafeapp.usecase.items.getallitems.GetAllItemsUseCase;
+import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -26,7 +28,16 @@ public class RouterRestItem {
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }
 
-
+    @Bean
+    public RouterFunction<ServerResponse> getItemsById(GetItemByIdUseCase getItemByIdUseCase){
+        return route(GET("/api/items/{id}"),
+                request -> getItemByIdUseCase.apply(request.pathVariable("id"))
+                        .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
+                        .flatMap(item -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(item))
+                        .onErrorResume(throwable -> ServerResponse.notFound().build()));
+    }
 
     @Bean
     public RouterFunction<ServerResponse> registerItem(RegisterItemUseCase registerItemUseCase) {
