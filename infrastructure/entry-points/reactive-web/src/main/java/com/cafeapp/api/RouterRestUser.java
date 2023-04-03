@@ -3,10 +3,12 @@ package com.cafeapp.api;
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.user.User;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
+import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
 import com.cafeapp.usecase.users.getuserbyid.GetUserByIdUseCase;
 import com.cafeapp.usecase.users.register.RegisterUserUseCase;
+import com.cafeapp.usecase.users.unregisteruser.UnregisterUserUseCase;
 import com.cafeapp.usecase.users.updateuser.UpdateUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -73,5 +75,16 @@ public class RouterRestUser {
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .bodyValue(result))
                                 .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_ACCEPTABLE).bodyValue(throwable.getMessage()))));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> unregisterUserById(UnregisterUserUseCase unregisterUserUseCase){
+        return route(DELETE("api/users/{id}"),
+                request -> unregisterUserUseCase.apply(request.pathVariable("id"))
+                        .thenReturn(ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue("User with ID: "+request.pathVariable("id") +", was unregistered"))
+                        .flatMap(serverResponseMono -> serverResponseMono)
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }
 }

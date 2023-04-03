@@ -75,6 +75,11 @@ public class MongoRepositoryAdapterUser implements UserRepositoryGateway
 
     @Override
     public Mono<Void> unregisterUser(String id) {
-        return null;
+        return this.userRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("User not found")))
+                .flatMap(user -> this.userRepository.deleteById(id))
+                //TODO: fix it to catch the error
+                .onErrorResume(Mono::error);
     }
 }
