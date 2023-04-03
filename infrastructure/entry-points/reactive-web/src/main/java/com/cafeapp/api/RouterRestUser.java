@@ -1,10 +1,13 @@
 package com.cafeapp.api;
 
+import com.cafeapp.model.item.Item;
 import com.cafeapp.model.user.User;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
+import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
 import com.cafeapp.usecase.users.getuserbyid.GetUserByIdUseCase;
 import com.cafeapp.usecase.users.register.RegisterUserUseCase;
+import com.cafeapp.usecase.users.updateuser.UpdateUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -54,6 +57,18 @@ public class RouterRestUser {
         return route(POST("/api/users").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(User.class)
                         .flatMap(student -> registerUserUseCase.apply(student)
+                                .flatMap(result -> ServerResponse.status(201)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .bodyValue(result))
+                                .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_ACCEPTABLE).bodyValue(throwable.getMessage()))));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> updateUser(UpdateUserUseCase updateUserUseCase) {
+        return route(PUT("/api/users/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(User.class)
+                        .flatMap(user -> updateUserUseCase.apply(request.pathVariable("id"), user)
+                                .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
                                 .flatMap(result -> ServerResponse.status(201)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .bodyValue(result))

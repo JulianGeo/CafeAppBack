@@ -3,6 +3,7 @@ package com.cafeapp.mongo;
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.user.User;
 import com.cafeapp.model.user.gateways.UserRepositoryGateway;
+import com.cafeapp.mongo.data.ItemData;
 import com.cafeapp.mongo.data.UserData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
@@ -61,8 +62,15 @@ public class MongoRepositoryAdapterUser implements UserRepositoryGateway
     }
 
     @Override
-    public Mono<User> updateUser(String id, User user) {
-        return null;
+    public Mono<User> updateUser(String id, User newUser) {
+        return this.userRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("No user matches the provided ID")))
+                .flatMap(oldUser ->{
+                    newUser.setId(oldUser.getId());
+                    return userRepository.save(mapper.map(newUser, UserData.class));
+                }).map(newUser1 -> mapper.map(newUser1, User.class))
+                .onErrorResume(Mono::error);
     }
 
     @Override

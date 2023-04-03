@@ -16,6 +16,7 @@ import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
 import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
 import com.cafeapp.usecase.users.getuserbyid.GetUserByIdUseCase;
 import com.cafeapp.usecase.users.register.RegisterUserUseCase;
+import com.cafeapp.usecase.users.updateuser.UpdateUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -39,10 +40,17 @@ public class UseCasesConfig {
                 return new GetUserByIdUseCase(gateway);
         }
 
+
         @Bean
         public RegisterUserUseCase registerUserUseCase(UserRepositoryGateway gateway){
                 return new RegisterUserUseCase(gateway);
         }
+
+        @Bean
+        public UpdateUserUseCase updateUserUseCase(UserRepositoryGateway gateway){
+                return new UpdateUserUseCase(gateway);
+        }
+
 
         // ====== Items =================================
         @Bean
