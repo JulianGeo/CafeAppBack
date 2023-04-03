@@ -7,9 +7,12 @@ import com.cafeapp.mongo.data.ItemData;
 import com.cafeapp.mongo.data.OrderData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 @Repository
 @RequiredArgsConstructor
@@ -42,9 +45,13 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
 
     @Override
     public Mono<Order> registerOrder(Order order) {
-        return this.orderRepository
-                .save(mapper.map(order, OrderData.class))
-                .map(order1 -> mapper.map(order1, Order.class))
+        return Mono.just(order)
+                .flatMap(order1 -> {
+                    order1.setCreatedAt(LocalDateTime.now());
+                    order1.setUpdatedAt(LocalDateTime.now());
+                    order1.calculateTotal();
+                    return this.orderRepository.save(mapper.map(order1, OrderData.class));
+                }).map(order2 -> mapper.map(order2, Order.class))
                 .onErrorResume(Mono::error);
     }
 
@@ -55,6 +62,8 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
                 .switchIfEmpty(Mono.error(new Throwable("No order matches the provided ID")))
                 .flatMap(oldOrder ->{
                     newOrder.setId(oldOrder.getId());
+                    newOrder.setUpdatedAt(LocalDateTime.now());
+                    newOrder.calculateTotal();
                     return orderRepository.save(mapper.map(newOrder, OrderData.class));
                 }).map(newOrder1 -> mapper.map(newOrder1, Order.class))
                 .onErrorResume(Mono::error);
