@@ -13,5 +13,7 @@ public interface ItemRepositoryGateway {
     Mono<Item> registerItem(Item item);
     Mono<Item> updateItem(String id, Item item);
     Mono<Void> unregisterItem(String id);
+    Mono<Void> deleteAll();
+
 }
 

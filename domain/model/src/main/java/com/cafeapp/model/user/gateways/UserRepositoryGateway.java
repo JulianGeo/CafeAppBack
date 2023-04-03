@@ -11,4 +11,6 @@ public interface UserRepositoryGateway {
     Mono<User> registerUser(User user);
     Mono<User> updateUser(String id, User user);
     Mono<Void> unregisterUser(String id);
+
+    Mono<Void> deleteAll();
 }
