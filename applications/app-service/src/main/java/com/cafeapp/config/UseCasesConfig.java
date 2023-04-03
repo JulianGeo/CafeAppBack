@@ -10,6 +10,7 @@ import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import com.cafeapp.usecase.orders.getallorders.GetAllOrdersUseCase;
 import com.cafeapp.usecase.orders.getorderbyid.GetOrderByIdUseCase;
 import com.cafeapp.usecase.orders.registerorder.RegisterOrderUseCase;
+import com.cafeapp.usecase.orders.unregisterorder.UnregisterOrderUseCase;
 import com.cafeapp.usecase.orders.updateorder.UpdateOrderUseCase;
 import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
 import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
@@ -84,6 +85,11 @@ public class UseCasesConfig {
         @Bean
         public UpdateOrderUseCase updateOrderUseCase(OrderRepositoryGateway gateway){
                 return new UpdateOrderUseCase(gateway);
+        }
+
+        @Bean
+        public UnregisterOrderUseCase unregisterOrderUseCase(OrderRepositoryGateway gateway){
+                return new UnregisterOrderUseCase(gateway);
         }
 
 

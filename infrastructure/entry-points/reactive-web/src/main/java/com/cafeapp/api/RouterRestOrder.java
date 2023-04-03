@@ -3,10 +3,12 @@ package com.cafeapp.api;
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.order.Order;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
+import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import com.cafeapp.usecase.orders.getallorders.GetAllOrdersUseCase;
 import com.cafeapp.usecase.orders.getorderbyid.GetOrderByIdUseCase;
 import com.cafeapp.usecase.orders.registerorder.RegisterOrderUseCase;
+import com.cafeapp.usecase.orders.unregisterorder.UnregisterOrderUseCase;
 import com.cafeapp.usecase.orders.updateorder.UpdateOrderUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,5 +66,16 @@ public class RouterRestOrder {
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .bodyValue(result))
                                 .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NOT_ACCEPTABLE).bodyValue(throwable.getMessage()))));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> unregisterOrderId(UnregisterOrderUseCase unregisterOrderUseCase) {
+        return route(DELETE("api/orders/{id}"),
+                request -> unregisterOrderUseCase.apply(request.pathVariable("id"))
+                        .thenReturn(ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue("Order with ID: "+request.pathVariable("id") +", was unregistered"))
+                        .flatMap(serverResponseMono -> serverResponseMono)
+                        .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }
 }

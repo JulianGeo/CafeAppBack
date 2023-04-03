@@ -62,6 +62,11 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
 
     @Override
     public Mono<Void> unregisterOrder(String id) {
-        return null;
+        return this.orderRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("Order not found")))
+                .flatMap(item -> this.orderRepository.deleteById(id))
+                //TODO: fix it to catch the error
+                .onErrorResume(Mono::error);
     }
 }
