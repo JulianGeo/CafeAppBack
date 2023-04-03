@@ -64,6 +64,12 @@ public class MongoRepositoryAdapterItem implements ItemRepositoryGateway {
 
     @Override
     public Mono<Void> unregisterItem(String id) {
-        return null;
+
+        return this.itemRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("Item not found")))
+                .flatMap(item -> this.itemRepository.deleteById(id))
+                //TODO: fix it to catch the error
+                .onErrorResume(Mono::error);
     }
 }
