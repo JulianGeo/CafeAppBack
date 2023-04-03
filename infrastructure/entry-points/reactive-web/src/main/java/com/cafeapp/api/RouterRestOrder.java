@@ -1,7 +1,9 @@
 package com.cafeapp.api;
 
 import com.cafeapp.model.order.Order;
+import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.orders.getallorders.GetAllOrdersUseCase;
+import com.cafeapp.usecase.orders.getorderbyid.GetOrderByIdUseCase;
 import com.cafeapp.usecase.orders.registerorder.RegisterOrderUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -24,6 +27,17 @@ public class RouterRestOrder {
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(getAllOrdersUseCasel.get(), Order.class))
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getOrderById(GetOrderByIdUseCase getOrderByIdUseCasel){
+        return route(GET("/api/orders/{id}"),
+                request -> getOrderByIdUseCasel.apply(request.pathVariable("id"))
+                        .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
+                        .flatMap(order -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(order))
+                        .onErrorResume(throwable -> ServerResponse.notFound().build()));
     }
 
     @Bean

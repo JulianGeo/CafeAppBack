@@ -14,7 +14,7 @@ public interface OrderRepositoryGateway {
 
     Mono<Order> registerOrder(Order order);
 
-    Mono<Order> updateOrder(Order order);
+    Mono<Order> updateOrder(String id, Order order);
 
-    Mono<String> unregisterOrder(String id);
+    Mono<Void> unregisterOrder(String id);
 }

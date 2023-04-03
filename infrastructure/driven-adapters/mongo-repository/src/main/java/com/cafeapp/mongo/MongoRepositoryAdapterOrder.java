@@ -3,7 +3,6 @@ package com.cafeapp.mongo;
 import com.cafeapp.model.order.Order;
 import com.cafeapp.model.order.gateways.OrderRepositoryGateway;
 import com.cafeapp.mongo.data.OrderData;
-import com.cafeapp.mongo.data.UserData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -28,7 +27,10 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
 
     @Override
     public Mono<Order> getOrderById(String id) {
-        return null;
+        return this.orderRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("Order not found")))
+                .map(order -> mapper.map(order, Order.class));
     }
 
     @Override

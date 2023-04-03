@@ -8,6 +8,7 @@ import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import com.cafeapp.usecase.orders.getallorders.GetAllOrdersUseCase;
+import com.cafeapp.usecase.orders.getorderbyid.GetOrderByIdUseCase;
 import com.cafeapp.usecase.orders.registerorder.RegisterOrderUseCase;
 import com.cafeapp.usecase.users.getall.GetAllUsersUseCase;
 import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
@@ -67,6 +68,12 @@ public class UseCasesConfig {
         public GetAllOrdersUseCase getAllOrdersUseCase(OrderRepositoryGateway gateway){
                 return new GetAllOrdersUseCase(gateway);
         }
+
+        @Bean
+        public GetOrderByIdUseCase getOrderByIdUseCase(OrderRepositoryGateway gateway){
+                return new GetOrderByIdUseCase(gateway);
+        }
+
 
         @Bean
         public RegisterOrderUseCase registerOrderUseCase(OrderRepositoryGateway gateway){
