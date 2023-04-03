@@ -45,12 +45,12 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
     }
 
     @Override
-    public Mono<Order> updateOrder(Order order) {
+    public Mono<Order> updateOrder(String id, Order order) {
         return null;
     }
 
     @Override
-    public Mono<String> unregisterOrder(String id) {
+    public Mono<Void> unregisterOrder(String id) {
         return null;
     }
 }
