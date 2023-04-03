@@ -1,7 +1,9 @@
 package com.cafeapp.mongo;
 
+import com.cafeapp.model.item.Item;
 import com.cafeapp.model.order.Order;
 import com.cafeapp.model.order.gateways.OrderRepositoryGateway;
+import com.cafeapp.mongo.data.ItemData;
 import com.cafeapp.mongo.data.OrderData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
@@ -47,8 +49,15 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
     }
 
     @Override
-    public Mono<Order> updateOrder(String id, Order order) {
-        return null;
+    public Mono<Order> updateOrder(String id, Order newOrder) {
+        return this.orderRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("No order matches the provided ID")))
+                .flatMap(oldOrder ->{
+                    newOrder.setId(oldOrder.getId());
+                    return orderRepository.save(mapper.map(newOrder, OrderData.class));
+                }).map(newOrder1 -> mapper.map(newOrder1, Order.class))
+                .onErrorResume(Mono::error);
     }
 
     @Override
