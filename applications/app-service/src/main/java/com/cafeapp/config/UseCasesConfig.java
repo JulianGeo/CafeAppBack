@@ -6,6 +6,7 @@ import com.cafeapp.model.user.gateways.UserRepositoryGateway;
 import com.cafeapp.usecase.items.deleteall.DeleteAllItemsUseCase;
 import com.cafeapp.usecase.items.getallitems.GetAllItemsUseCase;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
+import com.cafeapp.usecase.items.getitembyname.GetItemByNameUseCase;
 import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import com.cafeapp.usecase.orders.deleteall.DeleteAllOrdersUseCase;
@@ -81,6 +82,11 @@ public class UseCasesConfig {
         @Bean
         public GetItemByIdUseCase getItemByIdUseCase(ItemRepositoryGateway gateway){
                 return new GetItemByIdUseCase(gateway);
+        }
+
+        @Bean
+        public GetItemByNameUseCase getItemByNameUseCase(ItemRepositoryGateway gateway){
+                return new GetItemByNameUseCase(gateway);
         }
 
         @Bean

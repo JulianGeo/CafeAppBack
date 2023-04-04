@@ -4,10 +4,12 @@ import com.cafeapp.model.item.Item;
 import com.cafeapp.usecase.items.deleteall.DeleteAllItemsUseCase;
 import com.cafeapp.usecase.items.getallitems.GetAllItemsUseCase;
 import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
+import com.cafeapp.usecase.items.getitembyname.GetItemByNameUseCase;
 import com.cafeapp.usecase.items.registeritem.RegisterItemUseCase;
 import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
 import com.cafeapp.usecase.users.deleteall.DeleteAllUsersUseCase;
+import com.cafeapp.usecase.users.getuserbyemail.GetUserByEmailUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -36,6 +38,18 @@ public class RouterRestItem {
     public RouterFunction<ServerResponse> getItemsById(GetItemByIdUseCase getItemByIdUseCase){
         return route(GET("/api/items/{id}"),
                 request -> getItemByIdUseCase.apply(request.pathVariable("id"))
+                        .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
+                        .flatMap(item -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(item))
+                        .onErrorResume(throwable -> ServerResponse.notFound().build()));
+    }
+
+    //If there is more than an item with the given name it will return 404 not found
+    @Bean
+    public RouterFunction<ServerResponse> getItemByName(GetItemByNameUseCase getItemByNameUseCase){
+        return route(GET("/api/items/name/{name}"),
+                request -> getItemByNameUseCase.apply(request.pathVariable("name"))
                         .switchIfEmpty(Mono.error(new Throwable(HttpStatus.NO_CONTENT.toString())))
                         .flatMap(item -> ServerResponse.ok()
                                 .contentType(MediaType.APPLICATION_JSON)

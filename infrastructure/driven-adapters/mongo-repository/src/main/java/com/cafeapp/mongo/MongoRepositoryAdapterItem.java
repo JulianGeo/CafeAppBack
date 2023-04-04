@@ -2,9 +2,7 @@ package com.cafeapp.mongo;
 
 import com.cafeapp.model.item.Item;
 import com.cafeapp.model.item.gateways.ItemRepositoryGateway;
-import com.cafeapp.model.user.User;
 import com.cafeapp.mongo.data.ItemData;
-import com.cafeapp.mongo.data.UserData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -38,8 +36,11 @@ public class MongoRepositoryAdapterItem implements ItemRepositoryGateway {
     }
 
     @Override
-    public Mono<Item> getItemByName(String id) {
-        return null;
+    public Mono<Item> getItemByName(String name) {
+        return this.itemRepository
+                .findByName(name)
+                .switchIfEmpty(Mono.error(new Throwable("Item not found")))
+                .map(item -> mapper.map(item, Item.class));
     }
 
     @Override

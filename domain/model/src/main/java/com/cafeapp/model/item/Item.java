@@ -20,5 +20,10 @@ public class Item {
     private Double price;
     private Integer stock;
 
+    public boolean isAvailable() {
+        if (stock> 0) return true;
+        return false;
+    }
+
 }
 
