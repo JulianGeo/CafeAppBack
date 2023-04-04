@@ -62,9 +62,6 @@ public class RouterRestItem {
                         .onErrorResume(throwable -> ServerResponse.status(HttpStatus.NO_CONTENT).bodyValue(throwable.getMessage())));
     }
 
-
-
-
     @Bean
     @RouterOperation(path = "/api/items/{id}", produces = {
             MediaType.APPLICATION_JSON_VALUE},
@@ -93,11 +90,11 @@ public class RouterRestItem {
     @Bean
     @RouterOperation(path = "/api/items/name/{name}", produces = {
             MediaType.APPLICATION_JSON_VALUE},
-            beanClass = GetItemByIdUseCase.class,
+            beanClass = GetItemByNameUseCase.class,
             method = RequestMethod.GET,
             beanMethod = "apply",
             operation = @Operation(operationId = "getItemByName", tags = "Item usecases",
-                    parameters = {@Parameter(name = "name", description = "item Id", required = true, in = ParameterIn.PATH)},
+                    parameters = {@Parameter(name = "name", description = "item name", required = true, in = ParameterIn.PATH)},
                     responses = {
                             @ApiResponse(responseCode = "200", description = "Success",
                                     content = @Content(schema = @Schema(implementation = Item.class))),
@@ -151,7 +148,16 @@ public class RouterRestItem {
             beanClass = UpdateItemUseCase.class, method = RequestMethod.PUT,
             beanMethod = "apply",
             operation = @Operation(operationId = "updateItem", tags = "Item usecases",
-                    parameters = {@Parameter(name = "id", description = "Item Id", required = true, in = ParameterIn.PATH)},
+                    parameters = {@Parameter(
+                            name = "id",
+                            description = "Item Id",
+                            required = true,
+                            in = ParameterIn.PATH),
+
+                            @Parameter(
+                                    name = "item",
+                                    in = ParameterIn.PATH,
+                                    schema =@Schema(implementation = Item.class))},
                     responses = {
                             @ApiResponse(responseCode = "201", description = "Success",
                                     content = @Content(schema = @Schema(implementation = Item.class))),
@@ -175,7 +181,7 @@ public class RouterRestItem {
 
 
     @Bean
-    @RouterOperation(path = "api/items/{id}", produces = {
+    @RouterOperation(path = "/api/items/{id}", produces = {
             MediaType.APPLICATION_JSON_VALUE},
             beanClass = UnregisterItemUseCase.class, method = RequestMethod.DELETE,
             beanMethod = "apply",
