@@ -13,8 +13,8 @@ public class GetOrderByIdUseCase implements Function<String, Mono<Order>> {
     private final OrderRepositoryGateway repositoryGateway;
 
     @Override
-    public Mono<Order> apply(String orderId) {
-        return repositoryGateway.getOrderById(orderId);
+    public Mono<Order> apply(String id) {
+        return repositoryGateway.getOrderById(id);
     }
 
 }

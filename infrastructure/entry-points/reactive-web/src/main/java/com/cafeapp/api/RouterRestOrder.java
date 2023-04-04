@@ -123,7 +123,19 @@ public class RouterRestOrder {
             beanClass = UpdateUserUseCase.class, method = RequestMethod.PUT,
             beanMethod = "apply",
             operation = @Operation(operationId = "updateOrder", tags = "Order usecases",
-                    parameters = {@Parameter(name = "id", description = "Order Id", required = true, in = ParameterIn.PATH)},
+                    parameters = {@Parameter(
+                            name = "id",
+                            description = "Order Id",
+                            required = true,
+                            in = ParameterIn.PATH),
+                            @Parameter(
+                                    name = "order",
+                                    in = ParameterIn.PATH,
+                                    schema =@Schema(implementation = Order.class)),
+                            @Parameter(
+                                    name = "user",
+                                    in = ParameterIn.PATH,
+                                    schema =@Schema(implementation = User.class))},
                     responses = {
                             @ApiResponse(responseCode = "201", description = "Success",
                                     content = @Content(schema = @Schema(implementation = Order.class))),
@@ -146,7 +158,7 @@ public class RouterRestOrder {
 
 
     @Bean
-    @RouterOperation(path = "api/orders/{id}", produces = {
+    @RouterOperation(path = "/api/orders/{id}", produces = {
             MediaType.APPLICATION_JSON_VALUE},
             beanClass = UnregisterOrderUseCase.class, method = RequestMethod.DELETE,
             beanMethod = "apply",
@@ -156,7 +168,7 @@ public class RouterRestOrder {
                             @ApiResponse(responseCode = "200", description = "Success",
                                     content = @Content(schema = @Schema(implementation = String.class))),
                             //TODO: fix the code error
-                            @ApiResponse(responseCode = "404", description = "No content")
+                            @ApiResponse(responseCode = "204", description = "No content")
                     }))
     public RouterFunction<ServerResponse> unregisterOrderId(UnregisterOrderUseCase unregisterOrderUseCase) {
         return route(DELETE("api/orders/{id}"),
@@ -169,10 +181,10 @@ public class RouterRestOrder {
     }
 
     @Bean
-    @RouterOperation(path = "api/orders", produces = {
+    @RouterOperation(path = "/api/orders", produces = {
             MediaType.APPLICATION_JSON_VALUE},
-            beanClass = UnregisterUserUseCase.class, method = RequestMethod.DELETE,
-            beanMethod = "apply",
+            beanClass = DeleteAllOrdersUseCase.class, method = RequestMethod.DELETE,
+            beanMethod = "get",
             operation = @Operation(operationId = "deleteAllOrders", tags = "Order usecases",
                     parameters ={@Parameter(
                             name = "order",
@@ -182,7 +194,7 @@ public class RouterRestOrder {
                     responses = {
                             @ApiResponse(responseCode = "201", description = "Success",
                                     content = @Content(schema = @Schema(implementation = Order.class))),
-                            @ApiResponse(responseCode = "404", description = "No content")
+                            @ApiResponse(responseCode = "204", description = "No content")
                     }))
     public RouterFunction<ServerResponse> deleteAllOrders(DeleteAllOrdersUseCase deleteAllOrdersUseCase){
         return route(DELETE("api/orders"),

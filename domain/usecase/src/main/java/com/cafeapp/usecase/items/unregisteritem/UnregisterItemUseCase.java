@@ -12,7 +12,7 @@ public class UnregisterItemUseCase implements Function<String, Mono<Void>> {
     private final ItemRepositoryGateway repositoryGateway;
 
     @Override
-    public Mono<Void> apply(String itemId) {
-        return repositoryGateway.unregisterItem(itemId);
+    public Mono<Void> apply(String id) {
+        return repositoryGateway.unregisterItem(id);
     }
 }

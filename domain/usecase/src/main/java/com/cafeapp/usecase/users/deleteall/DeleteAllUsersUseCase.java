@@ -15,6 +15,4 @@ public class DeleteAllUsersUseCase implements Supplier<Mono<Void>> {
     public Mono<Void> get() {
         return repositoryGateway.deleteAll();
     }
-
-
 }

@@ -10,7 +10,6 @@ public interface OrderRepositoryGateway {
 
     Mono<Order> getOrderById(String id);
 
-    Mono<Order> getOrderByName(String id);
 
     Mono<Order> registerOrder(Order order);
 

@@ -12,8 +12,8 @@ public class UnregisterOrderUseCase implements Function<String, Mono<Void>> {
     private final OrderRepositoryGateway repositoryGateway;
 
     @Override
-    public Mono<Void> apply(String orderId) {
-        return repositoryGateway.unregisterOrder(orderId);
+    public Mono<Void> apply(String id) {
+        return repositoryGateway.unregisterOrder(id);
     }
 
 }

@@ -29,4 +29,9 @@ public class ItemData {
     private Double price;
     @NotNull(message ="stock is required")
     private Integer stock;
+
+    public boolean isAvailable() {
+        if (stock> 0) return true;
+        return false;
+    }
 }

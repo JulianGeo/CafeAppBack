@@ -1,13 +1,12 @@
 package com.cafeapp.mongo;
 
-import com.cafeapp.model.item.Item;
 import com.cafeapp.model.order.Order;
 import com.cafeapp.model.order.gateways.OrderRepositoryGateway;
-import com.cafeapp.mongo.data.ItemData;
+import com.cafeapp.model.user.User;
 import com.cafeapp.mongo.data.OrderData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.cglib.core.Local;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,6 +18,8 @@ import java.time.LocalDateTime;
 public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
 
     private final MongoDBRepositoryOrder orderRepository;
+    private final MongoDBRepositoryItem itemRepository;
+    private final MongoDBRepositoryUser userRepository;
     private final ObjectMapper mapper;
 
     @Override
@@ -30,6 +31,9 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
                 .onErrorResume(Mono::error);
     }
 
+
+
+
     @Override
     public Mono<Order> getOrderById(String id) {
         return this.orderRepository
@@ -38,15 +42,43 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
                 .map(order -> mapper.map(order, Order.class));
     }
 
-    @Override
-    public Mono<Order> getOrderByName(String id) {
-        return null;
-    }
 
     @Override
     public Mono<Order> registerOrder(Order order) {
         return Mono.just(order)
                 .flatMap(order1 -> {
+
+                    //TODO: validation of existing items and stock... try to add this logic in another method
+    /*                if (
+                            Mono.just(order)
+                                    .map(Order::getItems)
+                                    .map(items -> items.stream()
+                                            .map(item -> Mono.just(item))
+                                            .filter(item ->
+                                            itemRepository
+                                                    .existsById(item.map(item1 -> item1.getId())))
+
+
+
+
+                                    .filter(item ->
+                                            itemRepository
+                                                    .existsById(item.getId()))
+                                                    .switchIfEmpty(Mono.error(new Throwable ("item not found")))
+                                                    .filter(item1 -> item1.isAvailable())
+                                                    .switchIfEmpty(Mono.error(new Throwable ("no stock")))
+                                                    .thenReturn(true))
+
+                                                    //.map(itemData -> itemData.getStock())
+
+                                                    //.map(itemData -> itemData.getStock())
+                                                    //.filter(stock -> stock > 0)
+
+
+                    )
+                        return Mono.error(new Throwable("No items available"));
+                    }*/
+
                     order1.setCreatedAt(LocalDateTime.now());
                     order1.setUpdatedAt(LocalDateTime.now());
                     order1.calculateTotal();

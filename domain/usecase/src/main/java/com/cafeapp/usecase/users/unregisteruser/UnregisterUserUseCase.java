@@ -12,7 +12,7 @@ public class UnregisterUserUseCase implements Function<String, Mono<Void>> {
     private final UserRepositoryGateway repositoryGateway;
 
     @Override
-    public Mono<Void> apply(String email) {
-        return repositoryGateway.unregisterUser(email);
+    public Mono<Void> apply(String id) {
+        return repositoryGateway.unregisterUser(id);
     }
 }

@@ -13,7 +13,7 @@ public class GetItemByIdUseCase implements Function<String, Mono<Item>> {
     private final ItemRepositoryGateway repositoryGateway;
 
     @Override
-    public Mono<Item> apply(String s) {
-        return repositoryGateway.getItemById(s);
+    public Mono<Item> apply(String id) {
+        return repositoryGateway.getItemById(id);
     }
 }

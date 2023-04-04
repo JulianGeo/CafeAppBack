@@ -1,5 +1,6 @@
 package com.cafeapp.api;
 
+import com.cafeapp.model.item.Item;
 import com.cafeapp.model.order.Order;
 import com.cafeapp.model.user.User;
 import com.cafeapp.usecase.orders.getallorders.GetAllOrdersUseCase;
@@ -89,7 +90,7 @@ public class RouterRestUser {
     @Bean
     @RouterOperation(path = "/api/users/email/{email}", produces = {
             MediaType.APPLICATION_JSON_VALUE},
-            beanClass = GetUserByIdUseCase.class,
+            beanClass = GetUserByEmailUseCase.class,
             method = RequestMethod.GET,
             beanMethod = "apply",
             operation = @Operation(operationId = "getUserByEmail", tags = "User usecases",
@@ -146,12 +147,25 @@ public class RouterRestUser {
             beanClass = UpdateUserUseCase.class, method = RequestMethod.PUT,
             beanMethod = "apply",
             operation = @Operation(operationId = "updateUser", tags = "User usecases",
-                    parameters = {@Parameter(name = "id", description = "User Id", required = true, in = ParameterIn.PATH)},
+                    parameters = {@Parameter(
+                            name = "id",
+                            description = "User Id",
+                            required = true,
+                            in = ParameterIn.PATH),
+
+                            @Parameter(
+                                    name = "user",
+                                    in = ParameterIn.PATH,
+                                    schema =@Schema(implementation = User.class))},
                     responses = {
                             @ApiResponse(responseCode = "201", description = "Success",
                                     content = @Content(schema = @Schema(implementation = User.class))),
                             @ApiResponse(responseCode = "406", description = "Not acceptable, Try again")
-                    }))
+                    },
+                    requestBody = @RequestBody(
+                            required=true,
+                            description= "Register user",
+                            content = @Content(schema = @Schema(implementation = User.class)))))
     public RouterFunction<ServerResponse> updateUser(UpdateUserUseCase updateUserUseCase) {
         return route(PUT("/api/users/{id}").and(accept(MediaType.APPLICATION_JSON)),
                 request -> request.bodyToMono(User.class)
@@ -164,7 +178,7 @@ public class RouterRestUser {
     }
 
     @Bean
-    @RouterOperation(path = "api/users/{id}", produces = {
+    @RouterOperation(path = "/api/users/{id}", produces = {
             MediaType.APPLICATION_JSON_VALUE},
             beanClass = UnregisterUserUseCase.class, method = RequestMethod.DELETE,
             beanMethod = "apply",
@@ -173,7 +187,7 @@ public class RouterRestUser {
                     responses = {
                             @ApiResponse(responseCode = "201", description = "Success",
                                     content = @Content(schema = @Schema(implementation = User.class))),
-                            @ApiResponse(responseCode = "404", description = "No content")
+                            @ApiResponse(responseCode = "204", description = "No content")
                     }))
     public RouterFunction<ServerResponse> unregisterUserById(UnregisterUserUseCase unregisterUserUseCase) {
         return route(DELETE("api/users/{id}"),
@@ -187,15 +201,15 @@ public class RouterRestUser {
 
 
     @Bean
-    @RouterOperation(path = "api/users", produces = {
+    @RouterOperation(path = "/api/users", produces = {
             MediaType.APPLICATION_JSON_VALUE},
-            beanClass = UnregisterUserUseCase.class, method = RequestMethod.DELETE,
-            beanMethod = "apply",
+            beanClass = DeleteAllUsersUseCase.class, method = RequestMethod.DELETE,
+            beanMethod = "get",
             operation = @Operation(operationId = "deleteAllUsers", tags = "User usecases",
                     responses = {
                             @ApiResponse(responseCode = "201", description = "Success",
                                     content = @Content(schema = @Schema(implementation = User.class))),
-                            @ApiResponse(responseCode = "404", description = "No content")
+                            @ApiResponse(responseCode = "204", description = "No content")
                     }))
     public RouterFunction<ServerResponse> deleteAllUsers(DeleteAllUsersUseCase deleteAllUsersUseCase) {
         return route(DELETE("api/users"),
