@@ -13,7 +13,7 @@ spring:
     include: null
   data:
     mongodb:
-      uri: "mongodb://localhost:27017/test"
+      uri: "mongodb+srv://julianrojasgeo:julian123@greatbudda.jmyclzx.mongodb.net/cafe_app?retryWrites=true&w=majority"
 management:
   endpoints:
     web:
@@ -23,3 +23,6 @@ management:
     health:
       probes:
         enabled: true
+springdoc:
+  swagger-ui:
+    path: "/api/swagger-ui.html"
