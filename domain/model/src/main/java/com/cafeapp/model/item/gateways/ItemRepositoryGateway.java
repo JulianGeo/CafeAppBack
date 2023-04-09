@@ -9,7 +9,7 @@ public interface ItemRepositoryGateway {
 
     Flux<Item> getAllItems();
     Mono<Item> getItemById(String id);
-    Mono<Item> getItemByName(String id);
+    Mono<Item> getItemByName(String name);
     Mono<Item> registerItem(Item item);
     Mono<Item> updateItem(String id, Item item);
     Mono<Void> unregisterItem(String id);

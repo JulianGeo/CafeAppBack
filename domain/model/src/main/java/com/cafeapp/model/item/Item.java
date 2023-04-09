@@ -19,6 +19,7 @@ public class Item {
     private String imageUrl;
     private Double price;
     private Integer stock;
+    private String category;
 
     public boolean isAvailable() {
         if (stock> 0) return true;
