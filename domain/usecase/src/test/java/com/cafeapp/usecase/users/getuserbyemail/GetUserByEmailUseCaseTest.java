@@ -1,4 +1,4 @@
-package com.cafeapp.usecase.users.getuserbyid;
+package com.cafeapp.usecase.users.getuserbyemail;
 
 import com.cafeapp.model.user.User;
 import com.cafeapp.model.user.gateways.UserRepositoryGateway;
@@ -15,36 +15,36 @@ import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @ExtendWith(MockitoExtension.class)
-class GetUserByIdUseCaseTest {
+class GetUserByEmailUseCaseTest {
 
     @Mock
     UserRepositoryGateway userRepositoryGateway;
 
-    GetUserByIdUseCase getUserByIdUseCase;
+    GetUserByEmailUseCase getUserByEmailUseCase;
 
     @BeforeEach
-    void init() {
-        getUserByIdUseCase = new GetUserByIdUseCase(userRepositoryGateway);
+    void setUp() {
+        getUserByEmailUseCase = new GetUserByEmailUseCase(userRepositoryGateway);
     }
 
     @Test
-    @DisplayName("GetUserByIdUseCase()")
+    @DisplayName("GetUserByEmailUseCase")
     void get() {
-
         User user = new User("UserId", "UserIdNumber", "UserName", "UserLastName", "User@email.com", "Password" );
 
-        Mockito.when(userRepositoryGateway.getUserById(ArgumentMatchers.anyString()))
+        Mockito.when(userRepositoryGateway.getUserByEmail(ArgumentMatchers.anyString()))
                 .thenReturn(Mono.just(user));
 
-        var service = getUserByIdUseCase.apply("UserID");
+        var service = getUserByEmailUseCase.apply("User@email.com");
 
         StepVerifier.create(service)
                 //.expectNextCount(1)
                 .expectNextMatches(user1 -> user1.getEmail().equals("User@email.com"))
                 .verifyComplete();
-        Mockito.verify(userRepositoryGateway).getUserById("UserID");
+        Mockito.verify(userRepositoryGateway).getUserByEmail("User@email.com");
+
+
     }
 
 }
