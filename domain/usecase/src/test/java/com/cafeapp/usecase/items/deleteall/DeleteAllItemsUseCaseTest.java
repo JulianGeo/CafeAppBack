@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteAllItemsUseCaseTest {
@@ -37,7 +36,8 @@ class DeleteAllItemsUseCaseTest {
         var service = deleteAllItemsUseCase.get();
 
         StepVerifier.create(service)
-                .expectComplete();
+                .expectComplete()
+                .verify();
         Mockito.verify(itemRepositoryGateway).deleteAll();
     }
 

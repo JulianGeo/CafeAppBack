@@ -1,8 +1,6 @@
 package com.cafeapp.usecase.orders.deleteall;
 
-import com.cafeapp.model.item.gateways.ItemRepositoryGateway;
 import com.cafeapp.model.order.gateways.OrderRepositoryGateway;
-import com.cafeapp.usecase.orders.updateorder.UpdateOrderUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteAllOrdersUseCaseTest {
@@ -39,7 +36,8 @@ class DeleteAllOrdersUseCaseTest {
         var service = deleteAllOrdersUseCase.get();
 
         StepVerifier.create(service)
-                .expectComplete();
+                .expectComplete()
+                .verify();
         Mockito.verify(orderRepositoryGateway).deleteAll();
     }
 }

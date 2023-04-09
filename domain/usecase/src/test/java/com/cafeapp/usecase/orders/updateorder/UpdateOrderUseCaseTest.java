@@ -2,7 +2,6 @@ package com.cafeapp.usecase.orders.updateorder;
 
 import com.cafeapp.model.order.Order;
 import com.cafeapp.model.order.gateways.OrderRepositoryGateway;
-import com.cafeapp.model.user.User;
 import com.cafeapp.model.utils.InstanceProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateOrderUseCaseTest {
