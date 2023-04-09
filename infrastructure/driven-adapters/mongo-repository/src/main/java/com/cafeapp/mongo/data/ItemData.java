@@ -27,8 +27,11 @@ public class ItemData {
     private String imageUrl;
     @NotNull(message ="price is required")
     private Double price;
+    @NotNull(message ="category is required")
+    private String category;
     @NotNull(message ="stock is required")
     private Integer stock;
+
 
     public boolean isAvailable() {
         if (stock> 0) return true;

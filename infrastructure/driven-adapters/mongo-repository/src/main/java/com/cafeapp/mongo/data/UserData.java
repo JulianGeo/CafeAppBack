@@ -22,7 +22,7 @@ public class UserData {
     private String idNum;
     @NotBlank(message="Empty field error")
     @NotNull(message ="name is required")
-    @Pattern(regexp="^[A-Z][a-z]*$", message="name format is required")
+    //@Pattern(regexp="^[A-Z][a-z]*$", message="name format is required")
     private String name;
     private String lastname;
     private String email;
