@@ -31,7 +31,6 @@ class UnregisterUserUseCaseTest {
     @DisplayName("unregisterUserByID_Success")
     void deleteUser(){
         var userID = "ID1";
-        var user = Mono.just(InstanceProvider.user());
 
         Mockito.when(userRepositoryGateway.unregisterUser(userID)).thenReturn(Mono.empty());
 

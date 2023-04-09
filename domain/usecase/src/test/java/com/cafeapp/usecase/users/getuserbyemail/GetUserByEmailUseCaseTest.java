@@ -43,8 +43,6 @@ class GetUserByEmailUseCaseTest {
                 .expectNextMatches(user1 -> user1.getEmail().equals("User@email.com"))
                 .verifyComplete();
         Mockito.verify(userRepositoryGateway).getUserByEmail("User@email.com");
-
-
     }
 
 }
