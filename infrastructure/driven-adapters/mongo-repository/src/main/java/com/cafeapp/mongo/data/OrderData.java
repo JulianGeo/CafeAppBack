@@ -12,9 +12,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Document(collection = "orders")
@@ -28,7 +26,10 @@ public class OrderData {
     private User user;
     @NotNull(message ="items are required")
     @NotEmpty(message ="items are required")
-    private Set<Item> items = new HashSet();;
+    private Map<String, Integer> itemsQuantity = new HashMap<>();
+    @NotNull(message ="items are required")
+    @NotEmpty(message ="items are required")
+    private Set<Item>items = new HashSet();
     @NotBlank(message="Empty field error")
     @NotNull(message ="status is required")
     private String status;

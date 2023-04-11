@@ -9,7 +9,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -21,6 +23,7 @@ public class Order {
 
     private String id;
     private User user;
+    private Map<String, Integer> itemsQuantity = new HashMap<>();
     private Set<Item>items = new HashSet();
     private String status;
     private Double subtotal;
@@ -29,9 +32,9 @@ public class Order {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public void calculateTotal(){
+/*    public void calculateTotal(){
         subtotal = items.stream().map(Item::getPrice).mapToDouble(Double::doubleValue).sum();
         total = subtotal + shipping;
-    }
+    }*/
 
 }

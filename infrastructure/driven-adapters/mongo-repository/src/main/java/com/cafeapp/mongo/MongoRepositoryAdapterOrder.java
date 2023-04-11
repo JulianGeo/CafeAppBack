@@ -2,11 +2,9 @@ package com.cafeapp.mongo;
 
 import com.cafeapp.model.order.Order;
 import com.cafeapp.model.order.gateways.OrderRepositoryGateway;
-import com.cafeapp.model.user.User;
 import com.cafeapp.mongo.data.OrderData;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -81,7 +79,8 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
 
                     order1.setCreatedAt(LocalDateTime.now());
                     order1.setUpdatedAt(LocalDateTime.now());
-                    order1.calculateTotal();
+                    //TODO: modify to calculate total... maybe another endpoint
+                    //order1.calculateTotal();
                     return this.orderRepository.save(mapper.map(order1, OrderData.class));
                 }).map(order2 -> mapper.map(order2, Order.class))
                 .onErrorResume(Mono::error);
@@ -95,7 +94,8 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
                 .flatMap(oldOrder ->{
                     newOrder.setId(oldOrder.getId());
                     newOrder.setUpdatedAt(LocalDateTime.now());
-                    newOrder.calculateTotal();
+                    //TODO: modify to calculate total... maybe another endpoint
+                    //newOrder.calculateTotal();
                     return orderRepository.save(mapper.map(newOrder, OrderData.class));
                 }).map(newOrder1 -> mapper.map(newOrder1, Order.class))
                 .onErrorResume(Mono::error);
