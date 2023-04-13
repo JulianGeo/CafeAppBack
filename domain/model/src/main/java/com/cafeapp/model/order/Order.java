@@ -23,7 +23,6 @@ public class Order {
 
     private String id;
     private User user;
-    private Map<String, Integer> itemsQuantity = new HashMap<>();
     private Set<Item>items = new HashSet();
     private String status;
     private Double subtotal;

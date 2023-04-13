@@ -95,7 +95,34 @@ public class MongoRepositoryAdapterOrder implements OrderRepositoryGateway {
                     newOrder.setId(oldOrder.getId());
                     newOrder.setUpdatedAt(LocalDateTime.now());
                     //TODO: modify to calculate total... maybe another endpoint
-                    //newOrder.calculateTotal();
+                    return orderRepository.save(mapper.map(newOrder, OrderData.class));
+                }).map(newOrder1 -> mapper.map(newOrder1, Order.class))
+                .onErrorResume(Mono::error);
+    }
+
+    @Override
+    public Mono<Order> payOrder(String id, Order newOrder) {
+        return this.orderRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("No order matches the provided ID")))
+                .flatMap(oldOrder ->{
+                    newOrder.setId(oldOrder.getId());
+                    newOrder.setUpdatedAt(LocalDateTime.now());
+                    newOrder.setStatus("paid");
+                    return orderRepository.save(mapper.map(newOrder, OrderData.class));
+                }).map(newOrder1 -> mapper.map(newOrder1, Order.class))
+                .onErrorResume(Mono::error);
+    }
+
+    @Override
+    public Mono<Order> cancelOrder(String id, Order newOrder) {
+        return this.orderRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new Throwable("No order matches the provided ID")))
+                .flatMap(oldOrder ->{
+                    newOrder.setId(oldOrder.getId());
+                    newOrder.setUpdatedAt(LocalDateTime.now());
+                    newOrder.setStatus("cancelled");
                     return orderRepository.save(mapper.map(newOrder, OrderData.class));
                 }).map(newOrder1 -> mapper.map(newOrder1, Order.class))
                 .onErrorResume(Mono::error);

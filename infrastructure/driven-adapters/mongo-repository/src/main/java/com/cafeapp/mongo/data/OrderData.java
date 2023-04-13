@@ -26,9 +26,6 @@ public class OrderData {
     private User user;
     @NotNull(message ="items are required")
     @NotEmpty(message ="items are required")
-    private Map<String, Integer> itemsQuantity = new HashMap<>();
-    @NotNull(message ="items are required")
-    @NotEmpty(message ="items are required")
     private Set<Item>items = new HashSet();
     @NotBlank(message="Empty field error")
     @NotNull(message ="status is required")

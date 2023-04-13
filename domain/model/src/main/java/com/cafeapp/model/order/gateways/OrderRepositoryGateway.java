@@ -15,6 +15,11 @@ public interface OrderRepositoryGateway {
 
     Mono<Order> updateOrder(String id, Order order);
 
+    Mono<Order> payOrder(String id, Order order);
+
+    Mono<Order> cancelOrder(String id, Order order);
+
+
     Mono<Void> unregisterOrder(String id);
 
     Mono<Void> deleteAll();

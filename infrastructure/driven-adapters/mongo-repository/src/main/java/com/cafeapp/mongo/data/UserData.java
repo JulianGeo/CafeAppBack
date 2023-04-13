@@ -20,11 +20,13 @@ public class UserData {
     @Id
     private String id =UUID.randomUUID().toString().substring(0,10);
     private String idNum;
-    @NotBlank(message="Empty field error")
-    @NotNull(message ="name is required")
+    //@NotBlank(message="Empty field error")
+    //@NotNull(message ="name is required")
     //@Pattern(regexp="^[A-Z][a-z]*$", message="name format is required")
     private String name;
     private String lastname;
+    @NotBlank(message="Empty field error")
+    @NotNull(message ="name is required")
     private String email;
     private String password;
 }

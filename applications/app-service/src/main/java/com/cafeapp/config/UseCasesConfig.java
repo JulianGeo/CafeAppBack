@@ -9,9 +9,11 @@ import com.cafeapp.usecase.items.getitembyid.GetItemByIdUseCase;
 import com.cafeapp.usecase.items.getitembyname.GetItemByNameUseCase;
 import com.cafeapp.usecase.items.unregisteritem.UnregisterItemUseCase;
 import com.cafeapp.usecase.items.updateitem.UpdateItemUseCase;
+import com.cafeapp.usecase.orders.cancelorder.CancelOrderUseCase;
 import com.cafeapp.usecase.orders.deleteall.DeleteAllOrdersUseCase;
 import com.cafeapp.usecase.orders.getallorders.GetAllOrdersUseCase;
 import com.cafeapp.usecase.orders.getorderbyid.GetOrderByIdUseCase;
+import com.cafeapp.usecase.orders.payorder.PayOrderUseCase;
 import com.cafeapp.usecase.orders.registerorder.RegisterOrderUseCase;
 import com.cafeapp.usecase.orders.unregisterorder.UnregisterOrderUseCase;
 import com.cafeapp.usecase.orders.updateorder.UpdateOrderUseCase;
@@ -130,6 +132,16 @@ public class UseCasesConfig {
         @Bean
         public UpdateOrderUseCase updateOrderUseCase(OrderRepositoryGateway gateway){
                 return new UpdateOrderUseCase(gateway);
+        }
+
+        @Bean
+        public PayOrderUseCase payOrderUseCase(OrderRepositoryGateway gateway){
+                return new PayOrderUseCase(gateway);
+        }
+
+        @Bean
+        public CancelOrderUseCase cancelOrderUseCase(OrderRepositoryGateway gateway){
+                return new CancelOrderUseCase(gateway);
         }
 
         @Bean

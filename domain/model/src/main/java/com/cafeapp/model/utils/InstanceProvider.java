@@ -27,11 +27,11 @@ public class InstanceProvider {
     }
 
     public static Order order (){
-        return new Order("OrderId", user(), new HashMap<>(), new HashSet<>(), "status", 5.0,5.0,10.0, LocalDateTime.now(), LocalDateTime.now() );
+        return new Order("OrderId", user(), new HashSet<>(), "status", 5.0,5.0,10.0, LocalDateTime.now(), LocalDateTime.now() );
     }
 
     public static Order oldOrder (){
-        return new Order("Order0Id", user(), new HashMap<>(), new HashSet<>(), "status0", 10.0,15.0,25.0, LocalDateTime.now(), LocalDateTime.now() );
+        return new Order("Order0Id", user(), new HashSet<>(), "status0", 10.0,15.0,25.0, LocalDateTime.now(), LocalDateTime.now() );
     }
 
 
